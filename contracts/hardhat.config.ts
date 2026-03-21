@@ -34,5 +34,17 @@ export default defineConfig({
       url: configVariable("SEPOLIA_RPC_URL"),
       accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
     },
+    rskTestnet:{
+      type: "http",
+      chainId: 31,
+      url: configVariable("RSK_TESTNET_RPC_URL"),
+      accounts: [configVariable("PRIVATE_KEY")],
+    },
+    rskMainnet:{
+      type: "http",
+      chainId: 30,
+      url: configVariable("RSK_MAINNET_RPC_URL"),
+      accounts: [configVariable("PRIVATE_KEY")],
+    }
   },
 });
