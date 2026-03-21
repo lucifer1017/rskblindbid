@@ -22,16 +22,12 @@ contract BlindBid is ReentrancyGuard {
     bool public auctionEnded;
 
     struct Bid {
-        bytes32 blindedBid; // The locked keccak256 hash
-        uint256 deposit; // The dummy rBTC sent to mask the bid
+        bytes32 blindedBid;
+        uint256 deposit;
     }
 
     mapping(address => Bid) public bids;
-
-    // SECURITY: The Pull Payment tracking
     mapping(address => uint256) public pendingReturns;
-
-    // --- CONSTRUCTOR ---
     constructor(
         uint256 _commitDurationInSeconds,
         uint256 _revealDurationInSeconds,
@@ -42,13 +38,11 @@ contract BlindBid is ReentrancyGuard {
         beneficiary = _beneficiary;
     }
 
-    // --- EVENTS ---
     event BidCommitted(address indexed bidder, bytes32 blindedBid);
     event BidRevealed(address indexed bidder, uint256 amount);
     event Withdrawal(address indexed withdrawer, uint256 amount);
     event AuctionEnded(address winner, uint256 highestBid);
 
-    // --- MODIFIERS ---
     modifier onlyBefore(uint256 time) {
         if (block.timestamp > time) revert PhaseNotActive();
         _;
@@ -59,7 +53,6 @@ contract BlindBid is ReentrancyGuard {
         _;
     }
 
-    // --- CORE LOGIC ---
     function commit(
         bytes32 _blindedBid
     ) external payable onlyBefore(commitEndTime) {
@@ -80,29 +73,25 @@ contract BlindBid is ReentrancyGuard {
 
         if (deposit == 0) revert NothingToReveal();
 
-        // 1. CHECKS: Cryptographic Validation
         bytes32 expectedHash = keccak256(abi.encodePacked(_amount, _secret));
         if (expectedHash != bidToCheck.blindedBid) revert HashMismatch();
         if (_amount > deposit) revert BidExceedsDeposit();
 
-        // 2. EFFECTS: Clear data to prevent double-reveals
         bidToCheck.blindedBid = bytes32(0);
         bidToCheck.deposit = 0;
 
         uint256 refund = deposit;
 
         if (_amount > highestBid) {
-            // Add the previous winner's funds to the withdrawal mapping
             if (highestBidder != address(0)) {
                 pendingReturns[highestBidder] += highestBid;
             }
 
             highestBid = _amount;
             highestBidder = msg.sender;
-            refund -= _amount; // Deduct their winning bid from their refund
+            refund -= _amount;
         }
 
-        // Add any excess deposit to the user's withdrawal balance
         if (refund > 0) {
             pendingReturns[msg.sender] += refund;
         }
@@ -114,10 +103,8 @@ contract BlindBid is ReentrancyGuard {
         uint256 amount = pendingReturns[msg.sender];
         if (amount == 0) revert NothingToWithdraw();
 
-        // EFFECTS
         pendingReturns[msg.sender] = 0;
 
-        // INTERACTIONS
         (bool success, ) = payable(msg.sender).call{value: amount}("");
         if (!success) revert TransferFailed();
 
