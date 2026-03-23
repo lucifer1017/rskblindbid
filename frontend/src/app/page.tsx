@@ -1,5 +1,5 @@
 import AuctionStatus from "@/components/AuctionStatus";
-import CommitBid from "@/components/CommitBid";
+import AuctionManager from "@/components/AuctionManager";
 import WalletControls from "@/components/WalletControls";
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
         <section className="grid gap-6 lg:grid-cols-2">
           <WalletControls />
           <AuctionStatus />
-          <CommitBid />
+          <AuctionManager/>
         </section>
       </main>
     </div>

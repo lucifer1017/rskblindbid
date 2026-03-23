@@ -1,15 +1,19 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useConnection, useConnect, useConnectors, useDisconnect } from "wagmi";
 
 function shortAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
 export default function WalletControls() {
-  const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending, error } = useConnect();
-  const { disconnect } = useDisconnect();
+  const connection = useConnection();
+  const { mutate: connect, isPending, error } = useConnect();
+  const { mutate: disconnect } = useDisconnect();
+  const connectors = useConnectors();
+
+  const isConnected = connection.isConnected;
+  const address = connection.address;
 
   const injectedConnector = connectors.find((connector) => connector.type === "injected");
 
