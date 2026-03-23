@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useReadContracts } from "wagmi";
 
 import CommitBid from "@/components/CommitBid";
+import RevealBid from "@/components/RevealBid";
+import SettleAuction from "@/components/SettleAuction";
+import WithdrawRefund from "@/components/WithdrawRefund";
 import { BLINDBID_ABI, BLINDBID_ADDRESS } from "@/lib/constants";
 
 const CHAIN_ID = 31;
@@ -33,6 +36,9 @@ export default function AuctionManager() {
         functionName: "auctionEnded",
       },
     ],
+    query: {
+      refetchInterval: 5000,
+    },
   });
 
   useEffect(() => {
@@ -75,7 +81,14 @@ export default function AuctionManager() {
   }
 
   if (auctionEnded) {
-    return <div className="rounded-xl border border-zinc-200 bg-white p-5">Auction Settled. Winners paid.</div>;
+    return (
+      <div className="space-y-6">
+        <div className="rounded-xl border border-zinc-200 bg-white p-5 font-semibold text-zinc-900 shadow-sm">
+          Auction Settled. Winners paid.
+        </div>
+        <WithdrawRefund />
+      </div>
+    );
   }
 
   if (currentTime < commitEndTime) {
@@ -83,13 +96,19 @@ export default function AuctionManager() {
   }
 
   if (currentTime >= commitEndTime && currentTime < revealEndTime) {
-    return (
-      <div className="rounded-xl border border-zinc-200 bg-white p-5">
-        Reveal Phase Active (Component coming soon)
-        <p className="mt-2 text-xs text-zinc-500">Phase view uses your local clock for timing updates.</p>
-      </div>
-    );
+    return <RevealBid />;
   }
 
-  return <div className="rounded-xl border border-zinc-200 bg-white p-5">Auction Ended. Awaiting Settlement.</div>;
+  return (
+    <div className="space-y-6">
+      <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+        <h3 className="mb-2 text-base font-black tracking-tight text-zinc-900">Auction Ended. Awaiting Settlement.</h3>
+        <p className="mb-4 text-sm text-zinc-600">
+          The reveal phase is over. Anyone can settle the auction to finalize the winner and enable refunds.
+        </p>
+        <SettleAuction />
+      </div>
+      <WithdrawRefund />
+    </div>
+  );
 }

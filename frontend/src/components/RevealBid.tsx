@@ -6,6 +6,8 @@ import { useConnection, useWaitForTransactionReceipt, useWriteContract } from "w
 
 import { BLINDBID_ABI, BLINDBID_ADDRESS } from "@/lib/constants";
 
+const ROOTSTOCK_TESTNET_EXPLORER_TX_URL = "https://explorer.testnet.rootstock.io/tx/";
+
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error && error.message) {
     return error.message;
@@ -39,6 +41,8 @@ export default function RevealBid() {
 
     return `Reveal successful. Tx: ${txHash.slice(0, 10)}...${txHash.slice(-8)}`;
   }, [isConfirmed, txHash]);
+
+  const explorerTxUrl = txHash ? `${ROOTSTOCK_TESTNET_EXPLORER_TX_URL}${txHash}` : null;
 
   function onSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -131,6 +135,16 @@ export default function RevealBid() {
       {formError ? <p className="mt-3 text-sm text-red-600">{formError}</p> : null}
       {writeError ? <p className="mt-3 text-sm text-red-600">{getErrorMessage(writeError)}</p> : null}
       {successMessage ? <p className="mt-3 text-sm text-emerald-700">{successMessage}</p> : null}
+      {isConfirmed && explorerTxUrl ? (
+        <a
+          href={explorerTxUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex items-center rounded-md border border-zinc-300 bg-white px-2.5 py-1 text-xs font-semibold text-zinc-800 transition hover:-translate-y-0.5 hover:border-zinc-400"
+        >
+          View on Explorer
+        </a>
+      ) : null}
     </section>
   );
 }
