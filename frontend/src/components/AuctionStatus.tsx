@@ -32,11 +32,15 @@ export default function AuctionStatus() {
         functionName: "highestBidder",
       },
     ],
+    query: {
+      refetchInterval: 5000,
+    }
   });
 
   if (isLoading) {
     return (
-      <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+      <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+        <div className="mb-4 h-1 w-24 rounded-full bg-orange-400" />
         <div className="mb-4 h-5 w-40 animate-pulse rounded bg-zinc-200" />
         <div className="space-y-3">
           <div className="h-4 w-52 animate-pulse rounded bg-zinc-200" />
@@ -49,7 +53,7 @@ export default function AuctionStatus() {
 
   if (isError) {
     return (
-      <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+      <section className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700 shadow-sm">
         Failed to load auction status{error?.message ? `: ${error.message}` : "."}
       </section>
     );
@@ -59,16 +63,17 @@ export default function AuctionStatus() {
   const highestBid = data?.[1];
   const highestBidder = data?.[2];
 
-  const formattedHighestBid = highestBid !== undefined ? `${formatEther(highestBid)} rBTC` : "--";
+  const formattedHighestBid = highestBid !== undefined ? `${formatEther(highestBid)} tRBTC` : "--";
   const displayBidder =
     highestBidder && highestBidder !== zeroAddress ? shortAddress(highestBidder) : "No highest bidder yet";
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+    <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+      <div className="mb-4 h-1 w-24 rounded-full bg-orange-400" />
       <header className="mb-4 flex items-center justify-between">
-        <h2 className="text-base font-semibold text-zinc-900">Auction Status</h2>
+        <h2 className="text-base font-black tracking-tight text-zinc-900">Auction Status</h2>
         <span
-          className={`rounded-md px-2 py-1 text-xs font-medium ${
+          className={`rounded-md border px-2 py-1 text-xs font-semibold ${
             ended ? "bg-zinc-900 text-white" : "bg-orange-100 text-orange-700"
           }`}
         >
@@ -77,17 +82,17 @@ export default function AuctionStatus() {
       </header>
 
       <dl className="space-y-3 text-sm">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2">
           <dt className="text-zinc-600">Auction Ended</dt>
-          <dd className="font-medium text-zinc-900">{ended ? "Yes" : "No"}</dd>
+          <dd className="font-semibold text-zinc-900">{ended ? "Yes" : "No"}</dd>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2">
           <dt className="text-zinc-600">Highest Bid</dt>
-          <dd className="font-medium text-zinc-900">{formattedHighestBid}</dd>
+          <dd className="font-semibold text-zinc-900">{formattedHighestBid}</dd>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2">
           <dt className="text-zinc-600">Highest Bidder</dt>
-          <dd className="font-mono text-xs font-medium text-zinc-900">{displayBidder}</dd>
+          <dd className="font-mono text-xs font-semibold text-zinc-900">{displayBidder}</dd>
         </div>
       </dl>
     </section>
