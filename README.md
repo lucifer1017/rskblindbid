@@ -22,7 +22,7 @@ The contracts package deploys the Solidity contract; the frontend Next.js app dr
 | Verified contract (Rootstock Testnet) | [Blockscout](https://rootstock-testnet.blockscout.com/address/0xc966332872c9be7d96d69df388d88305f5a040b6?tab=contract) |
 | Capstone / project page (Hacktivator) | [hacktivator-marketplace.rootstock.io](https://hacktivator-marketplace.rootstock.io/idea/438) |
 | Source repository | [github.com/lucifer1017/rskblindbid](https://github.com/lucifer1017/rskblindbid) |
-| Replit | *To be added* |
+| Replit | [Replit project Link](https://replit.com/@lobamow445/rskblindbid) |
 
 
 ---
