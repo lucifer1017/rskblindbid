@@ -1,4 +1,4 @@
-export const BLINDBID_ADDRESS = "0x8a02fE3b7BA3AF4e67E4eFA3d2715Bb09af36C38" as const;
+export const BLINDBID_ADDRESS = "0x542C2E08037E005E0C29e510FCB6697b827C4f7D" as const;
 
 export const BLINDBID_ABI = [
   {
