@@ -1,6 +1,6 @@
 {
     "BlindBidModule": {
-        "commitDurationInSeconds": 240,
-        "revealDurationInSeconds": 240
+        "commitDurationInSeconds": 600,
+        "revealDurationInSeconds": 600
     }
 }
