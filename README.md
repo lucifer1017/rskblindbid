@@ -33,4 +33,4 @@ The contracts package deploys the Solidity contract; the frontend Next.js app dr
 
 - **Alchemy:** Core infrastructure layer—high-performance **RPC** endpoints for reliable communication between the Next.js frontend, deployment tooling, and **Rootstock Testnet**.
 
-- **Cookbook.dev:** Secure registry for battle-tested, audited smart contract primitives. The contract uses OpenZeppelin’s **`ReentrancyGuard`** (sourced through this workflow) to protect the isolated withdrawal patterns.
+
